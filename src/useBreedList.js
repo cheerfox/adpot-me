@@ -1,35 +1,8 @@
-import { useState, useEffect } from "react";
-
-const localCache = {};
+import fetchBreedList from "./fetchBreedList";
+import { useQuery } from "@tanstack/react-query";
 
 export default function useBreedList(animal) {
-  const [breedList, setBreedList] = useState([]);
-  const [status, setStatus] = useState("unloaded");
-
-  useEffect(() => {
-    if (!animal) {
-      setBreedList([]);
-    } else if (localCache[animal]) {
-      setBreedList(localCache[animal]);
-    } else {
-      requestBreedList();
-    }
-
-    // It's defined inside useEffect so it's not recreated on every render cycle.
-    async function requestBreedList() {
-      setBreedList([]);
-      setStatus("loading");
-
-      const res = await fetch(
-        `https://pets-v2.dev-apis.com/breeds?animal=${animal}`
-      );
-      const json = await res.json();
-
-      localCache[animal] = json.breeds || [];
-      setBreedList(localCache[animal]);
-      setStatus("loaded");
-    }
-  }, [animal]);
-
-  return [breedList, status];
+  // 注意這邊 ? 的用法
+  const result = useQuery(["breeds", animal], fetchBreedList);
+  return [result?.data?.breeds ?? [], result.status];
 }

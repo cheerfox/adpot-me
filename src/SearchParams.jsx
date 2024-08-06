@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import Pet from "./Pet";
 import useBreedList from "./useBreedList";
+import Result from "./Result";
 
 const SearchParams = () => {
-  console.log('re render');
   const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
   // const location = "Seattle, WA";
   const [location, setLocation] = useState("");
@@ -13,12 +12,10 @@ const SearchParams = () => {
   const [breeds] = useBreedList(animal);
 
   useEffect(() => {
-    console.log('use effect');
     requestPets();
   }, []); // 只有第一次 render 才會執行，rerender 的時候都不會執行，完全不傳參數，這個 effect 每次 rerender 都會執行
 
   async function requestPets() {
-    console.log('request Pets');
     // https://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}
     const res = await fetch(
       `https://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
@@ -82,14 +79,7 @@ const SearchParams = () => {
         </label>
         <button>Submit</button>
       </form>
-      {pets.map((pet) => (
-        <Pet
-          name={pet.name}
-          animal={pet.animal}
-          breed={pet.breed}
-          key={pet.id}
-        />
-      ))}
+      <Result pets={pets} />
     </div>
   );
 };
