@@ -1,8 +1,9 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Details from "./Details";
+// import Details from "./Details";
 import SearchParams from "./SearchParams";
+import DetailsErrorBoundary from "./Details";
 // import SearchParams from "./SearchParams";
 
 // component must return the markup from React.createElement
@@ -26,7 +27,7 @@ const App = () => {
           <Link to="/">Adpot Me!</Link>
         </header>
         <Routes>
-          <Route path="/details/:id" element={<Details />} />
+          <Route path="/details/:id" element={<DetailsErrorBoundary />} />
           <Route path="/" element={<SearchParams />} />
         </Routes>
       </QueryClientProvider>
