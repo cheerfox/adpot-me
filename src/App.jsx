@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import Details from "./Details";
 import SearchParams from "./SearchParams";
 import DetailsErrorBoundary from "./Details";
+import AdoptedPetContext from "./AdoptedPetContext";
 // import SearchParams from "./SearchParams";
 
 // component must return the markup from React.createElement
@@ -19,17 +21,19 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  console.log("app rerender");
+  const adoptedPetHook = useState(null);
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <header>
-          <Link to="/">Adpot Me!</Link>
-        </header>
-        <Routes>
-          <Route path="/details/:id" element={<DetailsErrorBoundary />} />
-          <Route path="/" element={<SearchParams />} />
-        </Routes>
+        <AdoptedPetContext.Provider value={adoptedPetHook}>
+          <header>
+            <Link to="/">Adpot Me!</Link>
+          </header>
+          <Routes>
+            <Route path="/details/:id" element={<DetailsErrorBoundary />} />
+            <Route path="/" element={<SearchParams />} />
+          </Routes>
+        </AdoptedPetContext.Provider>
       </QueryClientProvider>
       {/* <SearchParams /> */}
       {/* <Pet name="Luna" animal="dog" breed="Havanese" />
